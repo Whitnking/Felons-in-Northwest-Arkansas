@@ -1,0 +1,97 @@
+---
+title: "FelonsReleasedFrom2010to2019"
+author: "Whitney King"
+date: "4/21/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(rio)
+library(janitor)
+
+```
+
+#Wells Edit
+#Tell your readers what you are doing
+The following data comes from the Arkansas Department of Corrections annual report, total releases of inmates, 2009-2018. See pg. 18
+
+https://adc.arkansas.gov/images/uploads/ADC_FY18_Annual_Report_BOC_Approval_12_20_2018_Edit_3-28-19.pdf
+
+
+```{r}
+ReleasesByYear <- rio::import("https://docs.google.com/spreadsheets/d/1qdXV0n1w0UhYbuezK2pDIAwCHnKR99IR/edit#gid=355103371")
+#Clean names
+ReleasesByYear<- janitor::clean_names(ReleasesByYear)
+```
+
+```{r}
+ReleasesByYear %>% 
+  ggplot(aes(x = year, y = n, fill=n)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  theme(axis.text.x = element_text(angle=90)) +
+  #Wells added this - scale the x axis
+  scale_x_continuous(breaks=c(2009:2018)) +
+  labs(title = "Felons Released From Arkansas Prisons", 
+       subtitle = "Data from 2009-2018",
+       caption = "Source: Arkansas Department of Corrections. Graphic by Whitney King",
+       y="Inmates Released",
+       x="Fiscal Year")
+```
+```{r}
+ggplot(data = ReleasesByYear) + 
+  geom_point(mapping = aes(x = year, y = n, size = n, color = n), show.legend = FALSE) +
+  theme(axis.text.x = element_text(angle=90)) +
+  scale_x_continuous(breaks=c(2009:2018)) +
+  labs(title = "Felons Released From Arkansas Prisons", 
+       subtitle = "Data from 2009-2018",
+       caption = "Source: Arkansas Department of Corrections. Graphic by Whitney King",
+       y="Inmates Released",
+       x="Fiscal Year")
+```
+```{r}
+ggplot(ReleasesByYear, aes(x = year, y = n)) +
+  xlab("year") +
+  ylab("n") +
+  theme_minimal(base_size = 12, base_family = "Georgia") +
+  geom_point(aes(size = n, color = n), alpha = 0.7, show.legend = FALSE) +
+  #Wells note - I reduced the max_size to 10 to make the bubbles fit
+  scale_size_area(guide = FALSE, max_size = 10) +
+  scale_x_continuous(breaks=c(2009:2018)) +
+  labs(title = "Felons Released From Arkansas Prisons", 
+       subtitle = "Data from 2009-2018",
+       #Wells added source
+       caption = "Source: Arkansas Department of Corrections.Graphic by Whitney King",
+       y="Inmates Released",
+       x= "Fiscal Year")
+```
+#Wells edit
+
+```{r}
+library(scales)
+
+ggplot(ReleasesByYear, aes(x = year, y = n)) +
+  xlab("year") +
+  ylab("n") +
+  theme_minimal(base_size = 12, base_family = "Georgia") +
+  geom_point(aes(size = n, color = n), alpha = 0.7, show.legend = FALSE) +
+  scale_size_area(guide = FALSE, max_size = 10) +
+  geom_text(aes(label= comma(n)), hjust=.5, vjust=-2, size=3) +
+  scale_x_continuous(breaks=c(2009:2018)) +
+  scale_y_continuous(limits=c(6000,11000)) +
+  labs(title = "Felons Released From Arkansas Prisons", 
+       subtitle = "Data from 2009-2018",
+       #Wells added source
+       caption = "Source: Arkansas Department of Corrections.  Graphic by Whitney King",
+       y="Inmates Released",
+       x= "Fiscal Year")
+```
+Save this puppy into a hi-res file
+```{r}
+
+ggsave("King_Felons.png",device = "png",width=9,height=6, dpi=800)
+```
+
+
+
+
