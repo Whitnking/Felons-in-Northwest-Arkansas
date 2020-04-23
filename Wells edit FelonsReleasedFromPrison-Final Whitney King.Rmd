@@ -12,8 +12,6 @@ library(janitor)
 
 ```
 
-#Wells Edit
-#Tell your readers what you are doing
 The following data comes from the Arkansas Department of Corrections annual report, total releases of inmates, 2009-2018. See pg. 18
 
 https://adc.arkansas.gov/images/uploads/ADC_FY18_Annual_Report_BOC_Approval_12_20_2018_Edit_3-28-19.pdf
@@ -65,7 +63,7 @@ ggplot(ReleasesByYear, aes(x = year, y = n)) +
        y="Inmates Released",
        x= "Fiscal Year")
 ```
-#Wells edit
+
 
 ```{r}
 library(scales)
@@ -86,7 +84,6 @@ ggplot(ReleasesByYear, aes(x = year, y = n)) +
        y="Inmates Released",
        x= "Fiscal Year")
 ```
-Save this puppy into a hi-res file
 ```{r}
 
 ggsave("King_Felons.png",device = "png",width=9,height=6, dpi=800)
